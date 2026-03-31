@@ -1,0 +1,68 @@
+{
+  "case_id": "DEMO-ABSTAIN-001",
+  "applicant_data": {
+    "applicant_id": "APPL-2001",
+    "annual_revenue": null,
+    "net_income": null,
+    "debt_service_coverage_ratio": null,
+    "debt_to_income_ratio": 0.39,
+    "credit_score": 702,
+    "existing_debt": 41000,
+    "requested_amount": 60000
+  },
+  "uploaded_documents": [
+    {
+      "doc_id": "DOC-ABS-1",
+      "file_name": "short_note.txt",
+      "mime_type": "text/plain",
+      "content": "Applicant summary note without full financial statements.",
+      "metadata": {
+        "source": "analyst_note"
+      }
+    }
+  ],
+  "policy_corpus": [
+    {
+      "doc_id": "POL-PERS-01",
+      "title": "Personal Lending Policy",
+      "content": "Minimum credit score 700. Maximum DTI 0.43. Minimum annual revenue 50000. Minimum DSCR 1.20.",
+      "jurisdiction": "US",
+      "product_type": "PERSONAL_LOAN",
+      "rules": [
+        {
+          "rule_id": "R-CREDIT-700",
+          "metric": "credit_score",
+          "operator": ">=",
+          "threshold": 700,
+          "source_doc_id": "POL-PERS-01"
+        },
+        {
+          "rule_id": "R-DTI-43",
+          "metric": "debt_to_income_ratio",
+          "operator": "<=",
+          "threshold": 0.43,
+          "source_doc_id": "POL-PERS-01"
+        },
+        {
+          "rule_id": "R-REV-50K",
+          "metric": "annual_revenue",
+          "operator": ">=",
+          "threshold": 50000,
+          "source_doc_id": "POL-PERS-01"
+        },
+        {
+          "rule_id": "R-DSCR-120",
+          "metric": "debt_service_coverage_ratio",
+          "operator": ">=",
+          "threshold": 1.2,
+          "source_doc_id": "POL-PERS-01"
+        }
+      ]
+    }
+  ],
+  "regulatory_corpus": [],
+  "metadata_filters": {
+    "jurisdiction": "US",
+    "product_type": "PERSONAL_LOAN"
+  }
+}

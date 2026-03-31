@@ -1,0 +1,54 @@
+{
+  "case_id": "CASE-1001",
+  "applicant_data": {
+    "applicant_id": "APPL-1",
+    "annual_revenue": 1500000,
+    "net_income": 200000,
+    "debt_service_coverage_ratio": 1.5,
+    "debt_to_income_ratio": 0.35,
+    "credit_score": 720,
+    "existing_debt": 300000,
+    "requested_amount": 200000
+  },
+  "uploaded_documents": [
+    {
+      "doc_id": "DOC-1",
+      "file_name": "financials-2025.pdf",
+      "mime_type": "application/pdf",
+      "content": "Balance Sheet and Income Statement FY2025",
+      "metadata": {
+        "source": "customer_upload"
+      }
+    }
+  ],
+  "policy_corpus": [
+    {
+      "doc_id": "POL-1",
+      "title": "Commercial Lending Policy",
+      "content": "Minimum credit score 680 and DSCR >= 1.2",
+      "jurisdiction": "US",
+      "product_type": "SME_TERM_LOAN",
+      "rules": [
+        {
+          "rule_id": "R-CREDIT-680",
+          "metric": "credit_score",
+          "operator": ">=",
+          "threshold": 680,
+          "source_doc_id": "POL-1"
+        },
+        {
+          "rule_id": "R-DSCR-12",
+          "metric": "debt_service_coverage_ratio",
+          "operator": ">=",
+          "threshold": 1.2,
+          "source_doc_id": "POL-1"
+        }
+      ]
+    }
+  ],
+  "regulatory_corpus": [],
+  "metadata_filters": {
+    "jurisdiction": "US",
+    "product_type": "SME_TERM_LOAN"
+  }
+}
