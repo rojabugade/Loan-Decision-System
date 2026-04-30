@@ -199,6 +199,13 @@ def build_case_payload() -> dict:
     }
 
 
+def _doc_exists(doc_id: str, file_name: str) -> bool:
+    for existing in st.session_state.get("documents", []):
+        if existing.get("doc_id") == doc_id or existing.get("file_name") == file_name:
+            return True
+    return False
+
+
 def render_case_intake() -> None:
     st.markdown('<div class="section-title">Case Intake</div>', unsafe_allow_html=True)
 
@@ -261,28 +268,29 @@ def render_case_intake() -> None:
         )
         st.success(f"Added document {doc_id}")
 
-    if st.button("Add Uploaded Files", type="secondary"):
-        if not uploaded_files:
-            st.warning("No files selected.")
-        else:
-            for idx, upl in enumerate(uploaded_files, start=1):
-                parsed_content, parsed_mime = parse_uploaded_file(upl)
-                generated_id = f"DOC-UPL-{len(st.session_state.documents) + idx:03d}"
-                st.session_state.documents.append(
-                    {
-                        "doc_id": generated_id,
-                        "file_name": upl.name,
-                        "mime_type": parsed_mime,
-                        "content": parsed_content,
-                        "metadata": {
-                            "source": "file_upload",
-                            "uploader_role": uploader_role,
-                            "uploaded_at": datetime.utcnow().isoformat(),
-                        },
-                    }
-                )
-
-            st.success(f"Added {len(uploaded_files)} uploaded file(s)")
+    if uploaded_files:
+        newly_added = 0
+        for upl in uploaded_files:
+            parsed_content, parsed_mime = parse_uploaded_file(upl)
+            generated_id = f"DOC-UPL-{abs(hash(upl.name)) % 1_000_000:06d}"
+            if _doc_exists(generated_id, upl.name):
+                continue
+            st.session_state.documents.append(
+                {
+                    "doc_id": generated_id,
+                    "file_name": upl.name,
+                    "mime_type": parsed_mime,
+                    "content": parsed_content,
+                    "metadata": {
+                        "source": "file_upload",
+                        "uploader_role": uploader_role,
+                        "uploaded_at": datetime.utcnow().isoformat(),
+                    },
+                }
+            )
+            newly_added += 1
+        if newly_added > 0:
+            st.success(f"Added {newly_added} uploaded file(s)")
 
     if st.session_state.documents:
         st.dataframe(pd.DataFrame(st.session_state.documents), use_container_width=True, hide_index=True)
