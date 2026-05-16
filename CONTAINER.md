@@ -32,7 +32,7 @@ docker compose build --progress=plain
 docker compose up
 ```
 
-Open the UI at http://localhost:8501 and the API at http://localhost:8000.
+Open the UI at the port your orchestrator/proxy routes to the `ui` service, and the API at the port it routes to the `web` service. In Coolify, this is handled by the platform proxy rather than by publishing host ports in compose.
 
 Production note for Coolify
 
@@ -40,4 +40,5 @@ Production note for Coolify
 - The UI service uses the absolute path `/app/ui/app.py`, which avoids cwd-related failures in orchestrators.
 - The compose stack overrides `POSTGRES_DSN`, `REDIS_URL`, and `API_BASE_URL` to container service names (`db`, `redis`, `web`) instead of `localhost`.
 - The production compose file no longer depends on a local `.env` file or bind mounts, which makes it safer for Coolify deployments.
+- The production compose file does not publish host ports; it exposes service ports internally so Coolify can route traffic without port collisions.
 - If Coolify still shows a stale path error, redeploy with a cleared build cache and verify the app root is set to the repository root, not a subfolder.

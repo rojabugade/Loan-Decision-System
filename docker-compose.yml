@@ -2,8 +2,8 @@
 services:
   web:
     build: .
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       APP_NAME: Credit Analysis Platform
       APP_VERSION: 0.1.0
@@ -22,8 +22,8 @@ services:
   ui:
     build: .
     command: ["streamlit", "run", "/app/ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
-    ports:
-      - "8501:8501"
+    expose:
+      - "8501"
     environment:
       API_BASE_URL: http://web:8000
       APP_NAME: Credit Analysis Platform
@@ -43,15 +43,11 @@ services:
       POSTGRES_DB: credit
       POSTGRES_USER: credit
       POSTGRES_PASSWORD: credit
-    ports:
-      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 
   redis:
     image: redis:7
-    ports:
-      - "6379:6379"
 
 volumes:
   db_data:
