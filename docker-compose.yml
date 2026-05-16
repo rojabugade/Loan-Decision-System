@@ -3,7 +3,7 @@ services:
   web:
     build: .
     expose:
-      - "8000"
+      - "8082"
     environment:
       APP_NAME: Credit Analysis Platform
       APP_VERSION: 0.1.0
@@ -23,7 +23,7 @@ services:
     build: .
     command: ["streamlit", "run", "/app/ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
     expose:
-      - "8501"
+      - "8083"
     environment:
       API_BASE_URL: http://web:8000
       APP_NAME: Credit Analysis Platform
