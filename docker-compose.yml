@@ -3,26 +3,39 @@ services:
   web:
     build: .
     ports:
-      - "8085:8085"
-    env_file:
-      - .env
+      - "8000:8000"
+    environment:
+      APP_NAME: Credit Analysis Platform
+      APP_VERSION: 0.1.0
+      ENVIRONMENT: production
+      POSTGRES_DSN: postgresql+psycopg://postgres:postgres@db:5432/credit_ai
+      REDIS_URL: redis://redis:6379/0
+      MODEL_VERSION: gpt-5.3-codex
+      PROMPT_VERSION: credit-workflow-v1
+      LOW_CONFIDENCE_THRESHOLD: "0.55"
+      RETRIEVAL_CACHE_TTL_SECONDS: "300"
+      RETRIEVAL_TOP_K: "8"
     depends_on:
       - db
       - redis
-    volumes:
-      - ./:/app:cached
 
   ui:
     build: .
-    command: ["streamlit", "run", "ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
+    command: ["streamlit", "run", "/app/ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
     ports:
-      - "8086:8086"
-    env_file:
-      - .env
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://web:8000
+      APP_NAME: Credit Analysis Platform
+      APP_VERSION: 0.1.0
+      ENVIRONMENT: production
+      MODEL_VERSION: gpt-5.3-codex
+      PROMPT_VERSION: credit-workflow-v1
+      LOW_CONFIDENCE_THRESHOLD: "0.55"
+      RETRIEVAL_CACHE_TTL_SECONDS: "300"
+      RETRIEVAL_TOP_K: "8"
     depends_on:
       - web
-    volumes:
-      - ./:/app:cached
 
   db:
     image: postgres:15

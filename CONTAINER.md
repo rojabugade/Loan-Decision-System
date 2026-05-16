@@ -33,3 +33,11 @@ docker compose up
 ```
 
 Open the UI at http://localhost:8501 and the API at http://localhost:8000.
+
+Production note for Coolify
+
+- The API image now starts `uvicorn` without `--reload` and uses `/app` as the app directory.
+- The UI service uses the absolute path `/app/ui/app.py`, which avoids cwd-related failures in orchestrators.
+- The compose stack overrides `POSTGRES_DSN`, `REDIS_URL`, and `API_BASE_URL` to container service names (`db`, `redis`, `web`) instead of `localhost`.
+- The production compose file no longer depends on a local `.env` file or bind mounts, which makes it safer for Coolify deployments.
+- If Coolify still shows a stale path error, redeploy with a cleared build cache and verify the app root is set to the repository root, not a subfolder.
