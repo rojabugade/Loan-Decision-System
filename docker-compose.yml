@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "8085:8085"
     env_file:
       - .env
     depends_on:
@@ -16,7 +16,7 @@ services:
     build: .
     command: ["streamlit", "run", "ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
     ports:
-      - "8501:8501"
+      - "8086:8086"
     env_file:
       - .env
     depends_on:
